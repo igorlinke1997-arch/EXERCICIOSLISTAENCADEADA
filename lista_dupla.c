@@ -7,40 +7,58 @@ struct NoDuplo {
     struct NoDuplo *proximo;
 };
 
-void imprimirIdaEVolta(struct NoDuplo *head) {
+// Função para buscar CPF e mostrar vizinhos
+void buscarComVizinhos(struct NoDuplo *head, int cpf_alvo) {
+
     struct NoDuplo *atual = head;
 
-    printf("Ida: ");
     while (atual != NULL) {
-        printf("%d ", atual->dado);
 
-        if (atual->proximo == NULL) {
-            break;
+        // Encontrou o CPF
+        if (atual->dado == cpf_alvo) {
+
+            printf("O cidadão %d está na fila.\n", atual->dado);
+
+            // Pessoa na frente
+            if (atual->anterior != NULL) {
+                printf("Na frente dele está o %d\n",
+                       atual->anterior->dado);
+            } else {
+                printf("Ele está no início da fila.\n");
+            }
+
+            // Pessoa atrás
+            if (atual->proximo != NULL) {
+                printf("Atrás dele está o %d\n",
+                       atual->proximo->dado);
+            } else {
+                printf("Ele está no final da fila.\n");
+            }
+
+            return;
         }
 
         atual = atual->proximo;
     }
 
-    printf("\nVolta: ");
-    while (atual != NULL) {
-        printf("%d ", atual->dado);
-        atual = atual->anterior;
-    }
-
-    printf("\n");
+    printf("CPF não encontrado na fila.\n");
 }
 
 int main() {
+
+    // Criando nós
     struct NoDuplo *n1 = malloc(sizeof(struct NoDuplo));
     struct NoDuplo *n2 = malloc(sizeof(struct NoDuplo));
     struct NoDuplo *n3 = malloc(sizeof(struct NoDuplo));
     struct NoDuplo *n4 = malloc(sizeof(struct NoDuplo));
 
-    n1->dado = 10;
-    n2->dado = 20;
-    n3->dado = 30;
-    n4->dado = 40;
+    // Valores (CPF fictício)
+    n1->dado = 111;
+    n2->dado = 222;
+    n3->dado = 333;
+    n4->dado = 444;
 
+    // Ligando nós
     n1->anterior = NULL;
     n1->proximo = n2;
 
@@ -53,8 +71,10 @@ int main() {
     n4->anterior = n3;
     n4->proximo = NULL;
 
-    imprimirIdaEVolta(n1);
+    // Busca
+    buscarComVizinhos(n1, 333);
 
+    // Liberando memória
     free(n1);
     free(n2);
     free(n3);
